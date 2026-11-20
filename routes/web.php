@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarsController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RentalsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,12 @@ Route::middleware('auth', 'prevent-back')->group(function () {
 
     Route::resource('/data-rental', RentalsController::class)->names('rental');
     Route::patch('/data-rental/{id}/selesai', [RentalsController::class, 'selesai'])->name('rental.selesai');
+
+    Route::middleware('role:admin,staff')->group(function () {
+        Route::get('/data-payment', [PaymentController::class, 'index'])->name('payment.index');
+        Route::patch('/data-payment/{id}/paid', [PaymentController::class, 'paid'])->name('payment.paid');
+        Route::get('/data-payment/{id}/nota' , [PaymentController::class, 'nota'])->name('payment.nota');
+    });
 
     Route::middleware('role:admin')->group(function () {
 

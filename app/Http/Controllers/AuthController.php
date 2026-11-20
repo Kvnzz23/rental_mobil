@@ -21,29 +21,45 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        // 1. Cari user berdasarkan email terlebih dahulu
-        $user = User::where('email', $credentials['email'])->first();
+        // Otomatis mencari user berdasarkan email, mengecek Hash::check password, dan menjalankan Auth::login()
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        // 2. Jika email tidak ditemukan di database
-        if (!$user) {
-            return back()->withErrors([
-                'email' => 'Email tersebut tidak terdaftar di sistem.'
-            ])->onlyInput('email');
+            return redirect()->intended('/');
         }
 
-        // 3. Jika email ada, cek kecocokan password-nya
-        if (!Hash::check($credentials['password'], $user->password)) {
-            return back()->withErrors([
-                'password' => 'Password yang Anda masukkan salah.'
-            ])->onlyInput('email');
-        }
-
-        // 4. Jika keduanya benar, loginkan user & regenerasi session
-        Auth::login($user);
-        $request->session()->regenerate();
-
-        return redirect()->intended('/');
+        // Jika email tidak ada ATAU password salah
+        return back()->withErrors([
+            'email' => 'Email atau password yang Anda masukkan salah.',
+        ])->onlyInput('email');
     }
+
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'email'    => 'required|email',
+    //         'password' => 'required'
+    //     ]);
+
+    //     $user = User::where('email', $credentials['email'])->first();
+
+    //     if (!$user) {
+    //         return back()->withErrors([
+    //             'email' => 'Email tersebut tidak terdaftar di sistem.'
+    //         ])->onlyInput('email');
+    //     }
+
+    //     if (!Hash::check($credentials['password'], $user->password)) {
+    //         return back()->withErrors([
+    //             'password' => 'Password yang Anda masukkan salah.'
+    //         ])->onlyInput('email');
+    //     }
+
+    //     Auth::login($user);
+    //     $request->session()->regenerate();
+
+    //     return redirect()->intended('/');
+    // }
 
     public function logout(Request $request)
     {

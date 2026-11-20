@@ -69,12 +69,10 @@
                                             <i class="bi bi-check-lg"></i> Selesai
                                         </button>
                                     </form>
-                                    @endif
-
-                                    <!-- Tombol Edit (Baru Ditambahkan) -->
                                     <a href="{{ route('rental.edit', $rental->id_rental) }}" class="btn btn-sm btn-outline-secondary" title="Edit">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
+                                    @endif
 
                                     <button type="button"
                                         class="btn-solid theme-danger"

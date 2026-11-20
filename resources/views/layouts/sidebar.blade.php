@@ -84,15 +84,14 @@
             </a>
         </li>
 
-        @if (auth()->user()->role == 'admin')
         <li>
-            <a href="/pembayaran"
-                class="menu-item {{ request()->is('pembayaran*') ? 'active' : '' }}">
+            <a href="/data-payment"
+                class="menu-item {{ request()->is('data-payment*') ? 'active' : '' }}">
                 <i class="bi bi-credit-card me-2"></i>
                 Pembayaran
             </a>
         </li>
-
+        @if (auth()->user()->role == 'admin')
         <!-- Laporan -->
         <li>
             <a href="/laporan"
